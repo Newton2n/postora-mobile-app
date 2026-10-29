@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Alert, Pressable, StyleSheet, Text, TextInput } from "react-native";
+import { Alert, Pressable, Text, TextInput } from "react-native";
 import { router } from "expo-router";
 import { useSelector } from "react-redux";
 import { repository } from "@/lib/mock-repository";
@@ -34,24 +34,14 @@ export default function PostEditor({ post }: { post?: Post }) {
     }
   };
 
-  return <ScreenContainer scroll keyboard edges={["left", "right", "bottom"]} contentStyle={styles.container}>
-    <Text style={styles.heading}>{post ? "Edit post" : "Create a post"}</Text>
-    <Text style={styles.label}>Title</Text>
-    <TextInput value={title} onChangeText={setTitle} placeholder="Give your post a title" style={styles.input} maxLength={70} />
-    <Text style={styles.label}>Description</Text>
-    <TextInput value={content} onChangeText={setContent} placeholder="What would you like to share?" style={[styles.input, styles.multiline]} multiline maxLength={355} />
-    <Text style={styles.label}>Image URL</Text>
-    <TextInput value={imageUrl} onChangeText={setImageUrl} placeholder="https://..." autoCapitalize="none" style={styles.input} />
-    <Pressable onPress={save} disabled={saving} style={styles.button}><Text style={styles.buttonText}>{saving ? "Saving..." : "Save post"}</Text></Pressable>
+  return <ScreenContainer scroll keyboard edges={["left", "right", "bottom"]}>
+    <Text className="mb-6 text-3xl font-extrabold text-ink dark:text-white">{post ? "Edit post" : "Create a post"}</Text>
+    <Text className="mb-2 mt-4 font-extrabold text-slate-700 dark:text-slate-300">Title</Text>
+    <TextInput value={title} onChangeText={setTitle} placeholder="Give your post a title" placeholderTextColor="#94a3b8" className="rounded-xl border border-slate-300 bg-white p-3.5 text-ink dark:border-slate-700 dark:bg-slate-900 dark:text-white" maxLength={70} />
+    <Text className="mb-2 mt-4 font-extrabold text-slate-700 dark:text-slate-300">Description</Text>
+    <TextInput value={content} onChangeText={setContent} placeholder="What would you like to share?" placeholderTextColor="#94a3b8" className="min-h-32 rounded-xl border border-slate-300 bg-white p-3.5 text-ink dark:border-slate-700 dark:bg-slate-900 dark:text-white" multiline maxLength={355} />
+    <Text className="mb-2 mt-4 font-extrabold text-slate-700 dark:text-slate-300">Image URL</Text>
+    <TextInput value={imageUrl} onChangeText={setImageUrl} placeholder="https://..." placeholderTextColor="#94a3b8" autoCapitalize="none" className="rounded-xl border border-slate-300 bg-white p-3.5 text-ink dark:border-slate-700 dark:bg-slate-900 dark:text-white" />
+    <Pressable onPress={save} disabled={saving} className="mt-6 items-center rounded-xl bg-brand p-4 active:opacity-80"><Text className="font-extrabold text-white">{saving ? "Saving..." : "Save post"}</Text></Pressable>
   </ScreenContainer>;
 }
-
-const styles = StyleSheet.create({
-  container: { padding: 20 },
-  heading: { color: "#0f172a", fontSize: 28, fontWeight: "800", marginBottom: 24 },
-  label: { color: "#334155", fontWeight: "800", marginBottom: 8, marginTop: 16 },
-  input: { backgroundColor: "#fff", borderColor: "#cbd5e1", borderWidth: 1, borderRadius: 10, padding: 13, color: "#0f172a" },
-  multiline: { minHeight: 130, textAlignVertical: "top" },
-  button: { backgroundColor: "#2563eb", borderRadius: 10, padding: 15, alignItems: "center", marginTop: 24 },
-  buttonText: { color: "#fff", fontWeight: "800" },
-});

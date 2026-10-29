@@ -24,12 +24,12 @@ export default function PostScreen() {
   return (
     <ScreenContainer scroll edges={["left", "right", "bottom"]} contentStyle={styles.container}>
       <Image source={{ uri: post.imageUrl }} style={styles.image} />
-      <Text style={styles.title}>{post.title}</Text>
-      <Text style={styles.meta}>{post.authorName} · {post.createdAt} · {post.likes} likes</Text>
-      <Text style={styles.content}>{post.content}</Text>
+      <Text className="text-3xl font-extrabold text-ink dark:text-white">{post.title}</Text>
+      <Text className="mt-2 text-muted dark:text-slate-400">{post.authorName} · {post.createdAt} · {post.likes} likes</Text>
+      <Text className="mt-6 text-base leading-6 text-slate-700 dark:text-slate-300">{post.content}</Text>
       {isAuthor && <View style={styles.actions}>
-        <Pressable style={styles.secondary} onPress={() => router.push(`/edit-post/${post.id}`)}><Text style={styles.secondaryText}>Edit</Text></Pressable>
-        <Pressable style={styles.danger} onPress={remove}><Text style={styles.buttonText}>Delete</Text></Pressable>
+        <Pressable className="flex-1 items-center rounded-xl border border-brand p-3 active:opacity-80" onPress={() => router.push(`/edit-post/${post.id}`)}><Text className="font-extrabold text-brand">Edit</Text></Pressable>
+        <Pressable className="flex-1 items-center rounded-xl bg-red-600 p-3 active:opacity-80" onPress={remove}><Text className="font-extrabold text-white">Delete</Text></Pressable>
       </View>}
     </ScreenContainer>
   );

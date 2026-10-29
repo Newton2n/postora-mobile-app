@@ -16,17 +16,15 @@ export default function ScreenContainer({ children, edges = ["left", "right"], s
   const mood = useSelector((state: RootState) => state.theme.mood);
   const palette = colors[mood];
   const content = scroll ? (
-    <ScrollView contentContainerStyle={[styles.scroll, contentStyle]} keyboardShouldPersistTaps="handled">
+    <ScrollView className="flex-1" contentContainerStyle={[styles.scroll, contentStyle]} keyboardShouldPersistTaps="handled">
       {children}
     </ScrollView>
-  ) : <View style={[styles.content, contentStyle]}>{children}</View>;
+  ) : <View className="flex-1 px-4" style={contentStyle}>{children}</View>;
   const keyboardContent = keyboard ? <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : undefined} style={styles.flex}>{content}</KeyboardAvoidingView> : content;
-  return <SafeAreaView edges={edges} style={[styles.safe, { backgroundColor: palette.background }]}>{keyboardContent}</SafeAreaView>;
+  return <SafeAreaView className="flex-1 bg-canvas dark:bg-slate-950" edges={edges} style={{ backgroundColor: palette.background }}>{keyboardContent}</SafeAreaView>;
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.light.background },
   flex: { flex: 1 },
-  content: { flex: 1, paddingHorizontal: spacing.lg },
   scroll: { padding: spacing.lg, paddingBottom: spacing.xxl },
 });

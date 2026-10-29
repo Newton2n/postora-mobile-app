@@ -12,15 +12,11 @@ export default function ProfileScreen() {
   const [posts, setPosts] = useState<Post[]>([]);
   useEffect(() => { repository.getCurrentUser().then(setUser); if (userId) repository.listUserPosts(userId).then(setPosts); }, [userId]);
   return <ScreenContainer contentStyle={styles.container}><FlatList data={posts} keyExtractor={(item) => item.id} renderItem={({ item }) => <PostCard post={item} />} contentContainerStyle={styles.list} ListHeaderComponent={
-    <View style={styles.profile}>{user && <><Image source={{ uri: user.avatarUrl }} style={styles.avatar} /><Text style={styles.name}>{user.name}</Text><Text style={styles.bio}>{user.bio}</Text></>}</View>
+    <View className="mb-6 items-center">{user && <><Image source={{ uri: user.avatarUrl }} className="mb-3 h-24 w-24 rounded-full" /><Text className="text-2xl font-extrabold text-ink dark:text-white">{user.name}</Text><Text className="mt-1.5 text-center leading-5 text-muted dark:text-slate-400">{user.bio}</Text></>}</View>
   } /></ScreenContainer>;
 }
 
 const styles = StyleSheet.create({
   container: { paddingHorizontal: 0 },
   list: { paddingBottom: 8 },
-  profile: { alignItems: "center", marginBottom: 24 },
-  avatar: { width: 88, height: 88, borderRadius: 44, marginBottom: 12 },
-  name: { color: "#0f172a", fontSize: 24, fontWeight: "800" },
-  bio: { color: "#64748b", textAlign: "center", marginTop: 6, lineHeight: 20 },
 });

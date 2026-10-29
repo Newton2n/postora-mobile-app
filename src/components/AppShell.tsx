@@ -7,7 +7,7 @@ import { BlurView } from "expo-blur";
 import { RootState } from "@/store/store";
 import { logout, login } from "@/store/authSlice";
 import { repository } from "@/lib/mock-repository";
-import { colors, radius, spacing } from "@/theme/theme";
+import { spacing } from "@/theme/theme";
 
 export default function AppShell({ children }: PropsWithChildren) {
   const dispatch = useDispatch();
@@ -21,19 +21,19 @@ export default function AppShell({ children }: PropsWithChildren) {
   }, [dispatch, user]);
 
   return (
-    <View style={styles.root}>
-      {!isAuthRoute && <View style={[styles.header, { paddingTop: insets.top + spacing.sm }]}>
+    <View className="flex-1 bg-canvas dark:bg-slate-950">
+      {!isAuthRoute && <View className="overflow-hidden flex-row items-center justify-between border-b border-slate-200/60 bg-white/75 px-5 pb-3 dark:border-slate-700/60 dark:bg-slate-900/80" style={{ paddingTop: insets.top + spacing.sm }}>
         <BlurView intensity={45} tint="light" style={StyleSheet.absoluteFill} />
         <Link href="/" asChild>
-          <Pressable><Text style={styles.logo}>postora</Text></Pressable>
+          <Pressable accessibilityRole="button" accessibilityLabel="Go to home"><Text className="text-2xl font-extrabold tracking-tight text-ink dark:text-white">postora</Text></Pressable>
         </Link>
-        <View style={styles.headerActions}>
-          <Link href="/add-post" asChild><Pressable style={styles.addButton}><Text style={styles.addText}>＋ Create</Text></Pressable></Link>
-          <Pressable onPress={() => dispatch(logout())}><Text style={styles.avatar}>{user?.name.charAt(0) ?? "?"}</Text></Pressable>
+        <View className="flex-row items-center gap-3">
+          <Link href="/add-post" asChild><Pressable className="rounded-full bg-brand px-3 py-2 active:opacity-80" accessibilityRole="button"><Text className="font-bold text-white">＋ Create</Text></Pressable></Link>
+          <Pressable onPress={() => dispatch(logout())} accessibilityRole="button" accessibilityLabel="Sign out"><Text className="h-9 w-9 rounded-full bg-blue-100 pt-2 text-center font-extrabold text-blue-700 dark:bg-blue-950 dark:text-blue-300">{user?.name.charAt(0) ?? "?"}</Text></Pressable>
         </View>
       </View>}
-      <View style={styles.content}>{children}</View>
-      {!isAuthRoute && <View style={[styles.nav, { paddingBottom: insets.bottom + spacing.sm }]}>
+      <View className="flex-1">{children}</View>
+      {!isAuthRoute && <View className="overflow-hidden flex-row justify-around border-t border-slate-200/60 bg-white/75 pt-3 dark:border-slate-700/60 dark:bg-slate-900/80" style={{ paddingBottom: insets.bottom + spacing.sm }}>
         <BlurView intensity={55} tint="light" style={StyleSheet.absoluteFill} />
         <NavLink href="/" label="Home" active={pathname === "/"} />
         <NavLink href="/add-post" label="Create" active={pathname === "/add-post"} />
@@ -44,19 +44,5 @@ export default function AppShell({ children }: PropsWithChildren) {
 }
 
 function NavLink({ href, label, active }: { href: string; label: string; active: boolean }) {
-  return <Link href={href as never} style={[styles.navLink, active && styles.activeNav]}>{label}</Link>;
+  return <Link href={href as never} className={active ? "min-w-16 px-1 text-center font-bold text-brand" : "min-w-16 px-1 text-center font-bold text-muted dark:text-slate-400"}>{label}</Link>;
 }
-
-const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: "#f8fafc" },
-  header: { overflow: "hidden", flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingHorizontal: 20, paddingBottom: 12, backgroundColor: colors.light.glass, borderBottomWidth: 1, borderBottomColor: colors.light.border },
-  logo: { color: colors.light.text, fontSize: 24, fontWeight: "800", letterSpacing: -1 },
-  headerActions: { flexDirection: "row", alignItems: "center", gap: 12 },
-  addButton: { backgroundColor: colors.light.primary, borderRadius: radius.pill, paddingHorizontal: 12, paddingVertical: 8 },
-  addText: { color: "#fff", fontWeight: "700" },
-  avatar: { width: 34, height: 34, borderRadius: 17, backgroundColor: colors.light.primarySoft, color: colors.light.primary, textAlign: "center", paddingTop: 7, fontWeight: "800" },
-  content: { flex: 1 },
-  nav: { overflow: "hidden", flexDirection: "row", justifyContent: "space-around", paddingTop: 12, backgroundColor: colors.light.glass, borderTopWidth: 1, borderTopColor: colors.light.border },
-  navLink: { color: colors.light.secondaryText, fontWeight: "700", padding: 4, minWidth: 64, textAlign: "center" },
-  activeNav: { color: colors.light.primary },
-});

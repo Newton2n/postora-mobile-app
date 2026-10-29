@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { Pressable, Text, TextInput, View } from "react-native";
 import { Link, router } from "expo-router";
 import { useDispatch } from "react-redux";
 import { login } from "@/store/authSlice";
@@ -15,103 +15,25 @@ export default function AuthScreen({ mode }: { mode: "login" | "signup" }) {
 
   const submit = async () => {
     setSaving(true);
-    const user = isSignup
-      ? await repository.signUp(name, email)
-      : await repository.signIn(email);
+    const user = isSignup ? await repository.signUp(name, email) : await repository.signIn(email);
     dispatch(login(user));
     setSaving(false);
     router.replace("/");
   };
 
   return (
-    <ScreenContainer scroll keyboard edges={["top", "left", "right", "bottom"]} contentStyle={styles.container}>
-      <View>
-      <Text style={styles.logo}>postora</Text>
-      <Text style={styles.heading}>
-        {isSignup ? "Join the community" : "Welcome back"}
-      </Text>
-      <Text style={styles.subtitle}>
-        {isSignup
-          ? "Share the moments that inspire you."
-          : "Sign in to discover and share."}
-      </Text>
-      {isSignup && (
-        <TextInput
-          value={name}
-          onChangeText={setName}
-          placeholder="Your name"
-          style={styles.input}
-        />
-      )}
-      <TextInput
-        value={email}
-        onChangeText={setEmail}
-        placeholder="Email address"
-        autoCapitalize="none"
-        keyboardType="email-address"
-        style={styles.input}
-      />
-      <Pressable onPress={submit} disabled={saving} style={styles.button}>
-        <Text style={styles.buttonText}>
-          {saving ? "Please wait..." : isSignup ? "Create account" : "Sign in"}
-        </Text>
-      </Pressable>
-      <Link href={isSignup ? "/login" : "/signup"} style={styles.link}>
-        {isSignup
-          ? "Already have an account? Sign in"
-          : "New to Postora? Create an account"}
-      </Link>
+    <ScreenContainer scroll keyboard edges={["top", "left", "right", "bottom"]}>
+      <View className="flex-1 justify-center">
+        <Text className="mb-9 text-center text-3xl font-black text-brand">postora</Text>
+        <Text className="text-center text-3xl font-extrabold text-ink dark:text-white">{isSignup ? "Join the community" : "Welcome back"}</Text>
+        <Text className="mb-6 mt-2 text-center text-muted dark:text-slate-400">{isSignup ? "Share the moments that inspire you." : "Sign in to discover and share."}</Text>
+        {isSignup && <TextInput value={name} onChangeText={setName} placeholder="Your name" placeholderTextColor="#94a3b8" className="mb-3 rounded-xl border border-slate-300 bg-white p-3.5 text-ink dark:border-slate-700 dark:bg-slate-900 dark:text-white" />}
+        <TextInput value={email} onChangeText={setEmail} placeholder="Email address" placeholderTextColor="#94a3b8" autoCapitalize="none" keyboardType="email-address" className="mb-3 rounded-xl border border-slate-300 bg-white p-3.5 text-ink dark:border-slate-700 dark:bg-slate-900 dark:text-white" />
+        <Pressable onPress={submit} disabled={saving} className="mt-2 items-center rounded-xl bg-brand p-4 active:opacity-80" accessibilityRole="button">
+          <Text className="font-extrabold text-white">{saving ? "Please wait..." : isSignup ? "Create account" : "Sign in"}</Text>
+        </Pressable>
+        <Link href={isSignup ? "/login" : "/signup"} className="mt-5 text-center font-bold text-brand">{isSignup ? "Already have an account? Sign in" : "New to Postora? Create an account"}</Link>
       </View>
     </ScreenContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    padding: 24,
-    backgroundColor: "#f8fafc",
-  },
-  logo: {
-    color: "#2563eb",
-    fontSize: 26,
-    fontWeight: "900",
-    textAlign: "center",
-    marginBottom: 38,
-  },
-  heading: {
-    color: "#0f172a",
-    fontSize: 28,
-    fontWeight: "800",
-    textAlign: "center",
-  },
-  subtitle: {
-    color: "#64748b",
-    textAlign: "center",
-    marginTop: 8,
-    marginBottom: 26,
-  },
-  input: {
-    backgroundColor: "#fff",
-    borderColor: "#cbd5e1",
-    borderWidth: 1,
-    borderRadius: 10,
-    padding: 14,
-    marginBottom: 12,
-  },
-  button: {
-    backgroundColor: "#2563eb",
-    borderRadius: 10,
-    padding: 15,
-    alignItems: "center",
-    marginTop: 8,
-  },
-  buttonText: { color: "#fff", fontWeight: "800" },
-  link: {
-    color: "#2563eb",
-    textAlign: "center",
-    marginTop: 20,
-    fontWeight: "700",
-  },
-});
