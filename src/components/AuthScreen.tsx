@@ -4,6 +4,7 @@ import { Link, router } from "expo-router";
 import { useDispatch } from "react-redux";
 import { login } from "@/store/authSlice";
 import { repository } from "@/lib/mock-repository";
+import ScreenContainer from "@/components/ui/ScreenContainer";
 
 export default function AuthScreen({ mode }: { mode: "login" | "signup" }) {
   const dispatch = useDispatch();
@@ -23,7 +24,8 @@ export default function AuthScreen({ mode }: { mode: "login" | "signup" }) {
   };
 
   return (
-    <View style={styles.container}>
+    <ScreenContainer scroll keyboard edges={["top", "left", "right", "bottom"]} contentStyle={styles.container}>
+      <View>
       <Text style={styles.logo}>postora</Text>
       <Text style={styles.heading}>
         {isSignup ? "Join the community" : "Welcome back"}
@@ -59,7 +61,8 @@ export default function AuthScreen({ mode }: { mode: "login" | "signup" }) {
           ? "Already have an account? Sign in"
           : "New to Postora? Create an account"}
       </Link>
-    </View>
+      </View>
+    </ScreenContainer>
   );
 }
 

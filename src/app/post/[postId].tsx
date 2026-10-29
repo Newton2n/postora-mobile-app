@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { ActivityIndicator, Alert, Image, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, Alert, Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { useSelector } from "react-redux";
 import { repository } from "@/lib/mock-repository";
 import { Post } from "@/lib/types";
 import { RootState } from "@/store/store";
+import ScreenContainer from "@/components/ui/ScreenContainer";
 
 export default function PostScreen() {
   const { postId } = useLocalSearchParams<{ postId: string }>();
@@ -12,7 +13,7 @@ export default function PostScreen() {
   const user = useSelector((state: RootState) => state.auth.userData);
 
   useEffect(() => { if (postId) repository.getPost(postId).then(setPost); }, [postId]);
-  if (!post) return <View style={styles.center}><ActivityIndicator color="#2563eb" /></View>;
+  if (!post) return <ScreenContainer><View style={styles.center}><ActivityIndicator color="#2563eb" /></View></ScreenContainer>;
   const isAuthor = post.authorId === user?.id;
 
   const remove = () => Alert.alert("Delete post?", "This removes the demo post from the local repository.", [
@@ -21,7 +22,7 @@ export default function PostScreen() {
   ]);
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScreenContainer scroll edges={["left", "right", "bottom"]} contentStyle={styles.container}>
       <Image source={{ uri: post.imageUrl }} style={styles.image} />
       <Text style={styles.title}>{post.title}</Text>
       <Text style={styles.meta}>{post.authorName} · {post.createdAt} · {post.likes} likes</Text>
@@ -30,7 +31,7 @@ export default function PostScreen() {
         <Pressable style={styles.secondary} onPress={() => router.push(`/edit-post/${post.id}`)}><Text style={styles.secondaryText}>Edit</Text></Pressable>
         <Pressable style={styles.danger} onPress={remove}><Text style={styles.buttonText}>Delete</Text></Pressable>
       </View>}
-    </ScrollView>
+    </ScreenContainer>
   );
 }
 

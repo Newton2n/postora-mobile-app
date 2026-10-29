@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { Alert, Pressable, ScrollView, StyleSheet, Text, TextInput } from "react-native";
+import { Alert, Pressable, StyleSheet, Text, TextInput } from "react-native";
 import { router } from "expo-router";
 import { useSelector } from "react-redux";
 import { repository } from "@/lib/mock-repository";
 import { Post } from "@/lib/types";
 import { RootState } from "@/store/store";
+import ScreenContainer from "@/components/ui/ScreenContainer";
 
 export default function PostEditor({ post }: { post?: Post }) {
   const user = useSelector((state: RootState) => state.auth.userData);
@@ -33,7 +34,7 @@ export default function PostEditor({ post }: { post?: Post }) {
     }
   };
 
-  return <ScrollView contentContainerStyle={styles.container}>
+  return <ScreenContainer scroll keyboard edges={["left", "right", "bottom"]} contentStyle={styles.container}>
     <Text style={styles.heading}>{post ? "Edit post" : "Create a post"}</Text>
     <Text style={styles.label}>Title</Text>
     <TextInput value={title} onChangeText={setTitle} placeholder="Give your post a title" style={styles.input} maxLength={70} />
@@ -42,7 +43,7 @@ export default function PostEditor({ post }: { post?: Post }) {
     <Text style={styles.label}>Image URL</Text>
     <TextInput value={imageUrl} onChangeText={setImageUrl} placeholder="https://..." autoCapitalize="none" style={styles.input} />
     <Pressable onPress={save} disabled={saving} style={styles.button}><Text style={styles.buttonText}>{saving ? "Saving..." : "Save post"}</Text></Pressable>
-  </ScrollView>;
+  </ScreenContainer>;
 }
 
 const styles = StyleSheet.create({
